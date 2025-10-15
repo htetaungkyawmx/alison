@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:alison/ui/model/contacts_model.dart';
-import 'package:alison/ui/contacts_list/contacts_list_page.dart';
+import 'ui/model/contacts_model.dart';
+import 'ui/contacts_list/contacts_list_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,15 +16,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<ContactsModel>(
       model: contactsModel,
-      child: CupertinoApp(
+      child: const CupertinoApp(
         debugShowCheckedModeBanner: false,
         theme: CupertinoThemeData(
           brightness: Brightness.light,
-          primaryColor: CupertinoColors.systemBlue,
-          barBackgroundColor: CupertinoColors.systemBackground,
+          primaryColor: CupertinoColors.activeBlue,
           scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
         ),
-        home: const ContactsListPage(),
+        home: ContactsListPage(),
       ),
     );
   }

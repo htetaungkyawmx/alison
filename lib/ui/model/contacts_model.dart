@@ -1,9 +1,10 @@
+import 'dart:typed_data';
 import 'package:faker/faker.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:alison/data/contact.dart';
+import '../../data/contact.dart';
 
 class ContactsModel extends Model {
-  final List<Contact> _contacts = List.generate(20, (index) {
+  final List<Contact> _contacts = List.generate(8, (index) {
     final f = Faker();
     final first = f.person.firstName();
     final last = f.person.lastName();
@@ -11,20 +12,19 @@ class ContactsModel extends Model {
       name: '$first $last',
       email: f.internet.email(),
       phoneNumber: f.phoneNumber.us(),
-      isFavorite: index % 4 == 0,
     );
   });
 
   List<Contact> get contacts => _contacts;
 
-  void toggleFavorite(int index) {
-    _contacts[index].isFavorite = !_contacts[index].isFavorite;
+  void addContact(Contact contact) {
+    _contacts.add(contact);
     _sortContacts();
     notifyListeners();
   }
 
-  void addContact(Contact contact) {
-    _contacts.add(contact);
+  void toggleFavorite(int index) {
+    _contacts[index].isFavorite = !_contacts[index].isFavorite;
     _sortContacts();
     notifyListeners();
   }
