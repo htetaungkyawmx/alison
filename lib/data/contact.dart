@@ -4,6 +4,7 @@ class Contact {
   String phoneNumber;
   bool isFavorite;
   String? photoUrl;
+  DateTime? createdAt;
 
   Contact({
     required this.name,
@@ -11,5 +12,6 @@ class Contact {
     required this.phoneNumber,
     this.isFavorite = false,
     this.photoUrl,
+    this.createdAt,
   });
 }

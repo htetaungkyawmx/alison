@@ -15,71 +15,76 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   String? selectedPhotoUrl;
+  bool isFavorite = false;
 
   final List<String> samplePhotos = [
-    'https://i.pravatar.cc/150?img=1',
-    'https://i.pravatar.cc/150?img=2',
-    'https://i.pravatar.cc/150?img=3',
-    'https://i.pravatar.cc/150?img=4',
-    'https://i.pravatar.cc/150?img=5',
-    'https://i.pravatar.cc/150?img=6',
+    'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=200&h=200&fit=crop&crop=face',
+    'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop&crop=face',
+    'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop&crop=face',
+    'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face',
+    'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop&crop=face',
+    'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop&crop=face',
   ];
 
   @override
   Widget build(BuildContext context) {
-    return ScopedModelDescendant<ContactsModel>(
-      builder: (context, child, model) {
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            middle: const Text('New Contact'),
-            leading: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.pop(context),
-            ),
-            trailing: CupertinoButton(
-              padding: EdgeInsets.zero,
-              child: const Text(
-                'Save',
-                style: TextStyle(
-                  color: CupertinoColors.systemBlue,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              onPressed: () {
-                if (nameController.text.isNotEmpty &&
-                    phoneController.text.isNotEmpty) {
-                  model.addContact(Contact(
-                    name: nameController.text,
-                    email: emailController.text,
-                    phoneNumber: phoneController.text,
-                    photoUrl: selectedPhotoUrl,
-                  ));
-                  Navigator.pop(context);
-                } else {
-                  _showAlert(context);
-                }
-              },
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+        middle: const Text(
+          'New Contact',
+          style: TextStyle(fontWeight: FontWeight.w600),
+        ),
+        leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: CupertinoColors.systemRed),
+          ),
+          onPressed: () => Navigator.pop(context),
+        ),
+        trailing: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Text(
+            'Save',
+            style: TextStyle(
+              color: CupertinoColors.systemBlue,
+              fontWeight: FontWeight.w600,
             ),
           ),
-          child: SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.all(0),
-              children: [
-                // Photo Selection
-                Container(
-                  color: CupertinoColors.systemBackground,
-                  padding: const EdgeInsets.symmetric(vertical: 30),
-                  child: Column(
-                    children: [
-                      GestureDetector(
-                        onTap: _showPhotoOptions,
-                        child: Container(
-                          width: 100,
-                          height: 100,
+          onPressed: _saveContact,
+        ),
+      ),
+      child: SafeArea(
+        child: ListView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.all(0),
+          children: [
+            // Photo Section
+            Container(
+              color: CupertinoColors.systemBackground,
+              padding: const EdgeInsets.symmetric(vertical: 40),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: _showPhotoOptions,
+                    child: Stack(
+                      children: [
+                        Container(
+                          width: 120,
+                          height: 120,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: CupertinoColors.systemGrey5,
+                            gradient: selectedPhotoUrl == null
+                                ? LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      CupertinoColors.systemBlue,
+                                      CupertinoColors.systemPurple,
+                                    ],
+                                  )
+                                : null,
                             image: selectedPhotoUrl != null
                                 ? DecorationImage(
                                     image: NetworkImage(selectedPhotoUrl!),
@@ -89,83 +94,158 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
                           ),
                           child: selectedPhotoUrl == null
                               ? const Icon(
-                                  CupertinoIcons.camera,
-                                  size: 35,
-                                  color: CupertinoColors.systemGrey2,
+                                  CupertinoIcons.photo,
+                                  size: 40,
+                                  color: CupertinoColors.white,
                                 )
                               : null,
                         ),
-                      ),
-                      const SizedBox(height: 8),
-                      GestureDetector(
-                        onTap: _showPhotoOptions,
-                        child: Text(
-                          'Add Photo',
-                          style: TextStyle(
-                            color: CupertinoColors.systemBlue,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: BoxDecoration(
+                              color: CupertinoColors.systemBlue,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: CupertinoColors.systemBackground,
+                                width: 3,
+                              ),
+                            ),
+                            child: const Icon(
+                              CupertinoIcons.camera,
+                              size: 18,
+                              color: CupertinoColors.white,
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  GestureDetector(
+                    onTap: _showPhotoOptions,
+                    child: Text(
+                      'Choose Photo',
+                      style: TextStyle(
+                        color: CupertinoColors.systemBlue,
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
                       ),
-                    ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            // Form Section
+            CupertinoListSection.insetGrouped(
+              margin: EdgeInsets.zero,
+              children: [
+                // Name
+                CupertinoListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemBlue.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      CupertinoIcons.person,
+                      size: 18,
+                      color: CupertinoColors.systemBlue,
+                    ),
+                  ),
+                  title: CupertinoTextField(
+                    controller: nameController,
+                    placeholder: 'Full Name',
+                    padding: EdgeInsets.zero,
+                    style: const TextStyle(fontSize: 16),
+                    decoration: null,
                   ),
                 ),
 
-                const SizedBox(height: 1),
+                // Phone
+                CupertinoListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemGreen.withOpacity(0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      CupertinoIcons.phone,
+                      size: 18,
+                      color: CupertinoColors.systemGreen,
+                    ),
+                  ),
+                  title: CupertinoTextField(
+                    controller: phoneController,
+                    placeholder: 'Phone Number',
+                    keyboardType: TextInputType.phone,
+                    padding: EdgeInsets.zero,
+                    style: const TextStyle(fontSize: 16),
+                    decoration: null,
+                  ),
+                ),
 
-                // Form Fields
-                CupertinoListSection.insetGrouped(
-                  additionalDividerMargin: 0,
-                  children: [
-                    CupertinoListTile(
-                      leading: const Icon(
-                        CupertinoIcons.person,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                      title: CupertinoTextField(
-                        controller: nameController,
-                        placeholder: 'Full Name',
-                        padding: EdgeInsets.zero,
-                        style: const TextStyle(fontSize: 16),
-                        decoration: null,
-                      ),
+                // Email
+                CupertinoListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemOrange.withOpacity(0.1),
+                      shape: BoxShape.circle,
                     ),
-                    CupertinoListTile(
-                      leading: const Icon(
-                        CupertinoIcons.phone,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                      title: CupertinoTextField(
-                        controller: phoneController,
-                        placeholder: 'Phone Number',
-                        keyboardType: TextInputType.phone,
-                        padding: EdgeInsets.zero,
-                        style: const TextStyle(fontSize: 16),
-                        decoration: null,
-                      ),
+                    child: Icon(
+                      CupertinoIcons.mail,
+                      size: 18,
+                      color: CupertinoColors.systemOrange,
                     ),
-                    CupertinoListTile(
-                      leading: const Icon(
-                        CupertinoIcons.mail,
-                        color: CupertinoColors.systemGrey,
-                      ),
-                      title: CupertinoTextField(
-                        controller: emailController,
-                        placeholder: 'Email',
-                        keyboardType: TextInputType.emailAddress,
-                        padding: EdgeInsets.zero,
-                        style: const TextStyle(fontSize: 16),
-                        decoration: null,
-                      ),
+                  ),
+                  title: CupertinoTextField(
+                    controller: emailController,
+                    placeholder: 'Email Address',
+                    keyboardType: TextInputType.emailAddress,
+                    padding: EdgeInsets.zero,
+                    style: const TextStyle(fontSize: 16),
+                    decoration: null,
+                  ),
+                ),
+
+                // Favorite Toggle
+                CupertinoListTile(
+                  leading: Container(
+                    width: 30,
+                    height: 30,
+                    decoration: BoxDecoration(
+                      color: CupertinoColors.systemRed.withOpacity(0.1),
+                      shape: BoxShape.circle,
                     ),
-                  ],
+                    child: Icon(
+                      CupertinoIcons.heart,
+                      size: 18,
+                      color: CupertinoColors.systemRed,
+                    ),
+                  ),
+                  title: const Text('Add to Favorites'),
+                  trailing: CupertinoSwitch(
+                    value: isFavorite,
+                    onChanged: (value) => setState(() => isFavorite = value),
+                  ),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 
@@ -173,50 +253,88 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoActionSheet(
+        title: const Text('Choose a Photo'),
+        message: const Text('Select a profile picture for this contact'),
         actions: [
-          ...samplePhotos.map((photoUrl) => CupertinoActionSheetAction(
-                onPressed: () {
-                  setState(() {
-                    selectedPhotoUrl = photoUrl;
-                  });
-                  Navigator.pop(context);
-                },
-                child: Container(
-                  height: 60,
-                  child: Row(
-                    children: [
-                      Container(
-                        width: 50,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                            image: NetworkImage(photoUrl),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+          // Photo Grid
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+              ),
+              itemCount: samplePhotos.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedPhotoUrl = samplePhotos[index];
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      image: DecorationImage(
+                        image: NetworkImage(samplePhotos[index]),
+                        fit: BoxFit.cover,
                       ),
-                      const SizedBox(width: 15),
-                      const Text('Select this photo'),
-                    ],
+                    ),
                   ),
-                ),
-              )),
+                );
+              },
+            ),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () {
+              setState(() {
+                selectedPhotoUrl = null;
+              });
+              Navigator.pop(context);
+            },
+            child: const Text('Remove Photo'),
+          ),
         ],
         cancelButton: CupertinoActionSheetAction(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: const Text(
+            'Cancel',
+            style: TextStyle(color: CupertinoColors.systemRed),
+          ),
         ),
       ),
     );
   }
 
-  void _showAlert(BuildContext context) {
+  void _saveContact() {
+    if (nameController.text.isEmpty || phoneController.text.isEmpty) {
+      _showAlert('Missing Information', 
+          'Please enter at least name and phone number.');
+      return;
+    }
+
+    final model = ScopedModel.of<ContactsModel>(context);
+    model.addContact(Contact(
+      name: nameController.text.trim(),
+      email: emailController.text.trim(),
+      phoneNumber: phoneController.text.trim(),
+      isFavorite: isFavorite,
+      photoUrl: selectedPhotoUrl,
+    ));
+
+    Navigator.pop(context);
+  }
+
+  void _showAlert(String title, String content) {
     showCupertinoDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: const Text('Missing Information'),
-        content: const Text('Please enter at least name and phone number.'),
+        title: Text(title),
+        content: Text(content),
         actions: [
           CupertinoDialogAction(
             child: const Text('OK'),
