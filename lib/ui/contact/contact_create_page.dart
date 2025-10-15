@@ -11,9 +11,9 @@ class ContactCreatePage extends StatefulWidget {
 }
 
 class _ContactCreatePageState extends State<ContactCreatePage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
+  final nameController = TextEditingController();
+  final emailController = TextEditingController();
+  final phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +24,12 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
             middle: const Text('New Contact'),
             trailing: GestureDetector(
               onTap: () {
-                if (_nameController.text.isNotEmpty &&
-                    _phoneController.text.isNotEmpty) {
+                if (nameController.text.isNotEmpty &&
+                    phoneController.text.isNotEmpty) {
                   model.addContact(Contact(
-                    name: _nameController.text,
-                    email: _emailController.text,
-                    phoneNumber: _phoneController.text,
+                    name: nameController.text,
+                    email: emailController.text,
+                    phoneNumber: phoneController.text,
                   ));
                   Navigator.pop(context);
                 }
@@ -41,31 +41,29 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
             ),
           ),
           child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  CupertinoTextField(
-                    controller: _nameController,
-                    placeholder: 'Name',
-                    padding: const EdgeInsets.all(12),
-                  ),
-                  const SizedBox(height: 15),
-                  CupertinoTextField(
-                    controller: _emailController,
-                    placeholder: 'Email',
-                    keyboardType: TextInputType.emailAddress,
-                    padding: const EdgeInsets.all(12),
-                  ),
-                  const SizedBox(height: 15),
-                  CupertinoTextField(
-                    controller: _phoneController,
-                    placeholder: 'Phone Number',
-                    keyboardType: TextInputType.phone,
-                    padding: const EdgeInsets.all(12),
-                  ),
-                ],
-              ),
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                CupertinoTextField(
+                  controller: nameController,
+                  placeholder: 'Full Name',
+                  padding: const EdgeInsets.all(12),
+                ),
+                const SizedBox(height: 12),
+                CupertinoTextField(
+                  controller: emailController,
+                  placeholder: 'Email',
+                  padding: const EdgeInsets.all(12),
+                  keyboardType: TextInputType.emailAddress,
+                ),
+                const SizedBox(height: 12),
+                CupertinoTextField(
+                  controller: phoneController,
+                  placeholder: 'Phone Number',
+                  keyboardType: TextInputType.phone,
+                  padding: const EdgeInsets.all(12),
+                ),
+              ],
             ),
           ),
         );

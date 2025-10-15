@@ -3,7 +3,6 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:alison/data/contact.dart';
 
 class ContactsModel extends Model {
-  // Initialize with 20 random fake contacts
   final List<Contact> _contacts = List.generate(20, (index) {
     final f = Faker();
     final first = f.person.firstName();
@@ -17,20 +16,23 @@ class ContactsModel extends Model {
 
   List<Contact> get contacts => _contacts;
 
-  /// Toggle favorite and sort so favorites appear on top
   void toggleFavorite(int index) {
     _contacts[index].isFavorite = !_contacts[index].isFavorite;
+    _sortContacts();
+    notifyListeners();
+  }
+
+  void addContact(Contact contact) {
+    _contacts.add(contact);
+    _sortContacts();
+    notifyListeners();
+  }
+
+  void _sortContacts() {
     _contacts.sort((a, b) {
       if (a.isFavorite && !b.isFavorite) return -1;
       if (!a.isFavorite && b.isFavorite) return 1;
       return a.name.compareTo(b.name);
     });
-    notifyListeners();
-  }
-
-  /// Add a new contact
-  void addContact(Contact contact) {
-    _contacts.add(contact);
-    notifyListeners();
   }
 }

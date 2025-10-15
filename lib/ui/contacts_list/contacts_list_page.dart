@@ -4,13 +4,27 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:alison/ui/model/contacts_model.dart';
 import 'package:alison/ui/contacts_list/contact_tile.dart';
 
-class ContactsListPage extends StatelessWidget {
+class ContactsListPage extends StatefulWidget {
   const ContactsListPage({super.key});
+
+  @override
+  State<ContactsListPage> createState() => _ContactsListPageState();
+}
+
+class _ContactsListPageState extends State<ContactsListPage> {
+  String query = '';
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactsModel>(
       builder: (context, child, model) {
+        // Filter contacts based on search query
+        final filtered = model.contacts
+            .where((c) =>
+                c.name.toLowerCase().contains(query.toLowerCase()) ||
+                c.phoneNumber.contains(query))
+            .toList();
+
         return CupertinoPageScaffold(
           navigationBar: const CupertinoNavigationBar(
             middle: Text('Contacts'),
@@ -18,20 +32,40 @@ class ContactsListPage extends StatelessWidget {
           child: SafeArea(
             child: Stack(
               children: [
-                ListView.builder(
-                  itemCount: model.contacts.length,
-                  itemBuilder: (context, index) {
-                    return ContactTile(index: index);
-                  },
+                Column(
+                  children: [
+                    // Search bar
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 8),
+                      child: CupertinoSearchTextField(
+                        placeholder: 'Search Contacts',
+                        onChanged: (value) => setState(() => query = value),
+                      ),
+                    ),
+
+                    // Contact list
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: filtered.length,
+                        itemBuilder: (context, index) {
+                          final contactIndex =
+                              model.contacts.indexOf(filtered[index]);
+                          return ContactTile(index: contactIndex);
+                        },
+                      ),
+                    ),
+                  ],
                 ),
+
+                // Floating + button
                 Positioned(
                   bottom: 20,
                   right: 20,
                   child: CupertinoButton(
                     color: CupertinoColors.activeBlue,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    borderRadius: BorderRadius.circular(25),
+                    borderRadius: BorderRadius.circular(30),
+                    padding: const EdgeInsets.all(12),
                     child: const Icon(CupertinoIcons.add),
                     onPressed: () {
                       Navigator.push(
