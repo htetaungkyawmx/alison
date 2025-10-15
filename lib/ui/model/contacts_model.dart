@@ -3,12 +3,13 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:alison/data/contact.dart';
 
 class ContactsModel extends Model {
-  final List<Contact> _contacts = List.generate(50, (index) {
+  // Initialize with 20 random fake contacts
+  final List<Contact> _contacts = List.generate(20, (index) {
     final f = Faker();
-    final firstName = f.person.firstName();
-    final lastName = f.person.lastName();
+    final first = f.person.firstName();
+    final last = f.person.lastName();
     return Contact(
-      name: '$firstName $lastName',
+      name: '$first $last',
       email: f.internet.email(),
       phoneNumber: f.phoneNumber.us(),
     );
@@ -16,18 +17,18 @@ class ContactsModel extends Model {
 
   List<Contact> get contacts => _contacts;
 
-  /// Toggle a contact's favorite status and sort list so favorites come first
+  /// Toggle favorite and sort so favorites appear on top
   void toggleFavorite(int index) {
     _contacts[index].isFavorite = !_contacts[index].isFavorite;
     _contacts.sort((a, b) {
       if (a.isFavorite && !b.isFavorite) return -1;
       if (!a.isFavorite && b.isFavorite) return 1;
-      return 0;
+      return a.name.compareTo(b.name);
     });
-    notifyListeners(); // 🔥 Notify all widgets to rebuild
+    notifyListeners();
   }
 
-  /// Add a new contact to the list
+  /// Add a new contact
   void addContact(Contact contact) {
     _contacts.add(contact);
     notifyListeners();

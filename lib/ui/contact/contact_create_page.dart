@@ -1,64 +1,68 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:alison/data/contact.dart';
 import 'package:alison/ui/model/contacts_model.dart';
 
 class ContactCreatePage extends StatefulWidget {
+  const ContactCreatePage({super.key});
+
   @override
   State<ContactCreatePage> createState() => _ContactCreatePageState();
 }
 
 class _ContactCreatePageState extends State<ContactCreatePage> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactsModel>(
       builder: (context, child, model) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text('Create Contact'),
+        return CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            middle: const Text('New Contact'),
+            trailing: GestureDetector(
+              onTap: () {
+                if (_nameController.text.isNotEmpty &&
+                    _phoneController.text.isNotEmpty) {
+                  model.addContact(Contact(
+                    name: _nameController.text,
+                    email: _emailController.text,
+                    phoneNumber: _phoneController.text,
+                  ));
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text(
+                'Save',
+                style: TextStyle(color: CupertinoColors.activeBlue),
+              ),
+            ),
           ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: _formKey,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
               child: Column(
                 children: [
-                  TextFormField(
+                  CupertinoTextField(
                     controller: _nameController,
-                    decoration: const InputDecoration(labelText: 'Name'),
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a name' : null,
+                    placeholder: 'Name',
+                    padding: const EdgeInsets.all(12),
                   ),
-                  TextFormField(
+                  const SizedBox(height: 15),
+                  CupertinoTextField(
                     controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter an email' : null,
+                    placeholder: 'Email',
+                    keyboardType: TextInputType.emailAddress,
+                    padding: const EdgeInsets.all(12),
                   ),
-                  TextFormField(
+                  const SizedBox(height: 15),
+                  CupertinoTextField(
                     controller: _phoneController,
-                    decoration: const InputDecoration(labelText: 'Phone'),
-                    validator: (value) =>
-                        value!.isEmpty ? 'Please enter a phone number' : null,
-                  ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        model.addContact(Contact(
-                          name: _nameController.text,
-                          email: _emailController.text,
-                          phoneNumber: _phoneController.text,
-                        ));
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: const Text('Save'),
+                    placeholder: 'Phone Number',
+                    keyboardType: TextInputType.phone,
+                    padding: const EdgeInsets.all(12),
                   ),
                 ],
               ),
