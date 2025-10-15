@@ -18,7 +18,6 @@ class _ContactsListPageState extends State<ContactsListPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactsModel>(
       builder: (context, child, model) {
-        // Filter contacts based on search query
         final filtered = model.contacts
             .where((c) =>
                 c.name.toLowerCase().contains(query.toLowerCase()) ||
@@ -34,7 +33,6 @@ class _ContactsListPageState extends State<ContactsListPage> {
               children: [
                 Column(
                   children: [
-                    // Search bar
                     Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
@@ -43,8 +41,6 @@ class _ContactsListPageState extends State<ContactsListPage> {
                         onChanged: (value) => setState(() => query = value),
                       ),
                     ),
-
-                    // Contact list
                     Expanded(
                       child: ListView.builder(
                         itemCount: filtered.length,
@@ -57,8 +53,6 @@ class _ContactsListPageState extends State<ContactsListPage> {
                     ),
                   ],
                 ),
-
-                // Floating + button
                 Positioned(
                   bottom: 20,
                   right: 20,

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:alison/data/contact.dart';
 import 'package:alison/ui/model/contacts_model.dart';
@@ -44,6 +45,19 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                const SizedBox(height: 10),
+                Center(
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundColor: CupertinoColors.systemGrey5,
+                    child: const Icon(
+                      CupertinoIcons.person_crop_circle_fill_badge_plus,
+                      size: 50,
+                      color: CupertinoColors.systemGrey,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
                 CupertinoTextField(
                   controller: nameController,
                   placeholder: 'Full Name',

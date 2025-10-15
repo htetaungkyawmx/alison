@@ -14,19 +14,24 @@ class ContactDetailPage extends StatelessWidget {
       ),
       child: SafeArea(
         child: ListView(
+          padding: const EdgeInsets.all(16),
           children: [
             const SizedBox(height: 30),
             Center(
               child: CircleAvatar(
                 radius: 60,
                 backgroundColor: CupertinoColors.systemGrey5,
-                child: Text(
-                  contact.name[0],
-                  style: const TextStyle(
-                    fontSize: 45,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+                backgroundImage:
+                    contact.imagePath != null ? AssetImage(contact.imagePath!) : null,
+                child: contact.imagePath == null
+                    ? Text(
+                        contact.name[0],
+                        style: const TextStyle(
+                          fontSize: 45,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : null,
               ),
             ),
             const SizedBox(height: 15),
@@ -43,9 +48,6 @@ class ContactDetailPage extends StatelessWidget {
                 CupertinoListTile(
                   leading: const Icon(CupertinoIcons.phone),
                   title: Text(contact.phoneNumber),
-                  onTap: () {
-                    // in real app, use url_launcher
-                  },
                 ),
                 CupertinoListTile(
                   leading: const Icon(CupertinoIcons.mail),

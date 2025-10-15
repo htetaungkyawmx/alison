@@ -18,6 +18,11 @@ class MyApp extends StatelessWidget {
       model: contactsModel,
       child: const CupertinoApp(
         debugShowCheckedModeBanner: false,
+        theme: CupertinoThemeData(
+          brightness: Brightness.light,
+          primaryColor: CupertinoColors.activeBlue,
+          scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
+        ),
         home: ContactsListPage(),
       ),
     );

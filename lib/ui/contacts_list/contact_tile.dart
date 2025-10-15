@@ -1,13 +1,12 @@
-import 'package:alison/ui/contacts_list/widget/contact_detail_page.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:alison/ui/model/contacts_model.dart';
-import 'package:alison/data/contact.dart';
 import 'package:flutter/material.dart';
+import 'package:alison/data/contact.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:alison/ui/model/contacts_model.dart';
+import 'package:alison/ui/contacts_list/widget/contact_detail_page.dart';
 
 class ContactTile extends StatelessWidget {
   final int index;
-
   const ContactTile({super.key, required this.index});
 
   @override
@@ -30,16 +29,20 @@ class ContactTile extends StatelessWidget {
             child: Row(
               children: [
                 CircleAvatar(
-                  radius: 25,
+                  radius: 26,
                   backgroundColor: CupertinoColors.systemGrey5,
-                  child: Text(
-                    contact.name[0],
-                    style: const TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w600,
-                      color: CupertinoColors.black,
-                    ),
-                  ),
+                  backgroundImage:
+                      contact.imagePath != null ? AssetImage(contact.imagePath!) : null,
+                  child: contact.imagePath == null
+                      ? Text(
+                          contact.name[0],
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: CupertinoColors.black,
+                          ),
+                        )
+                      : null,
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -48,7 +51,7 @@ class ContactTile extends StatelessWidget {
                     children: [
                       Text(contact.name,
                           style: const TextStyle(
-                              fontSize: 17, fontWeight: FontWeight.w500)),
+                              fontSize: 17, fontWeight: FontWeight.w600)),
                       Text(contact.phoneNumber,
                           style: const TextStyle(
                               fontSize: 14,
@@ -64,9 +67,9 @@ class ContactTile extends StatelessWidget {
                         : CupertinoIcons.star,
                     color: contact.isFavorite
                         ? CupertinoColors.systemYellow
-                        : CupertinoColors.systemGrey2,
+                        : CupertinoColors.systemGrey3,
                   ),
-                )
+                ),
               ],
             ),
           ),
