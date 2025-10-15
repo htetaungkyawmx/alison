@@ -16,14 +16,15 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScopedModel<ContactsModel>(
       model: contactsModel,
-      child: const CupertinoApp(
+      child: CupertinoApp(
         debugShowCheckedModeBanner: false,
         theme: CupertinoThemeData(
           brightness: Brightness.light,
-          primaryColor: CupertinoColors.activeBlue,
+          primaryColor: CupertinoColors.systemBlue,
+          barBackgroundColor: CupertinoColors.systemBackground,
           scaffoldBackgroundColor: CupertinoColors.systemGroupedBackground,
         ),
-        home: ContactsListPage(),
+        home: const ContactsListPage(),
       ),
     );
   }

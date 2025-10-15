@@ -3,7 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:alison/data/contact.dart';
 
 class ContactsModel extends Model {
-  final List<Contact> _contacts = List.generate(10, (index) {
+  final List<Contact> _contacts = List.generate(20, (index) {
     final f = Faker();
     final first = f.person.firstName();
     final last = f.person.lastName();
@@ -11,6 +11,8 @@ class ContactsModel extends Model {
       name: '$first $last',
       email: f.internet.email(),
       phoneNumber: f.phoneNumber.us(),
+      isFavorite: index % 5 == 0, // Some favorites for demo
+      photoUrl: index % 3 == 0 ? 'https://i.pravatar.cc/150?img=${index + 1}' : null,
     );
   });
 
