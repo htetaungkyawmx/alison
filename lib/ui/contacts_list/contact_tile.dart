@@ -23,49 +23,41 @@ class ContactTile extends StatelessWidget {
               ),
             );
           },
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeInOut,
-            child: CupertinoListTile(
-              leading: Hero(
-                tag: contact.name,
-                child: CircleAvatar(
-                  radius: 22,
-                  backgroundColor: CupertinoColors.systemGrey5,
-                  backgroundImage:
-                  contact.image != null ? MemoryImage(contact.image!) : null,
-                  child: contact.image == null
-                      ? Text(
-                    contact.name[0],
+          child: Container(
+            color: CupertinoColors.systemBackground,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Row(
+              children: [
+                Hero(
+                  tag: contact.name,
+                  child: CircleAvatar(
+                    radius: 22,
+                    backgroundColor: CupertinoColors.systemGrey5,
+                    backgroundImage:
+                    contact.image != null ? MemoryImage(contact.image!) : null,
+                    child: contact.image == null
+                        ? Text(
+                      contact.name[0].toUpperCase(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: CupertinoColors.black,
+                      ),
+                    )
+                        : null,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    contact.name,
                     style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: CupertinoColors.black,
+                      fontSize: 17,
+                      color: CupertinoColors.label,
                     ),
-                  )
-                      : null,
-                ),
-              ),
-              title: Text(contact.name),
-              subtitle: Text(contact.phoneNumber),
-              trailing: GestureDetector(
-                onTap: () => model.toggleFavorite(index),
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  transitionBuilder: (child, anim) => ScaleTransition(
-                    scale: anim,
-                    child: child,
-                  ),
-                  child: Icon(
-                    contact.isFavorite
-                        ? CupertinoIcons.star_fill
-                        : CupertinoIcons.star,
-                    key: ValueKey(contact.isFavorite),
-                    color: contact.isFavorite
-                        ? CupertinoColors.systemYellow
-                        : CupertinoColors.systemGrey2,
                   ),
                 ),
-              ),
+              ],
             ),
           ),
         );

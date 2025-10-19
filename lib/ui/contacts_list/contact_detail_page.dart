@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../../../data/contact.dart';
 
 class ContactDetailPage extends StatelessWidget {
@@ -10,26 +9,27 @@ class ContactDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
         middle: Text(contact.name),
       ),
       child: SafeArea(
         child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 24),
           children: [
-            const SizedBox(height: 40),
             Center(
               child: Hero(
                 tag: contact.name,
                 child: CircleAvatar(
-                  radius: 65,
+                  radius: 60,
                   backgroundColor: CupertinoColors.systemGrey5,
                   backgroundImage:
                   contact.image != null ? MemoryImage(contact.image!) : null,
                   child: contact.image == null
                       ? Text(
-                    contact.name[0],
+                    contact.name[0].toUpperCase(),
                     style: const TextStyle(
-                      fontSize: 44,
+                      fontSize: 42,
                       fontWeight: FontWeight.w600,
                     ),
                   )
@@ -37,7 +37,7 @@ class ContactDetailPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Center(
               child: Text(
                 contact.name,
