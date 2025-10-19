@@ -36,7 +36,7 @@ class ContactTile extends StatelessWidget {
                     backgroundImage: contact.image != null
                         ? MemoryImage(contact.image!)
                         : (contact.imageUrl != null
-                        ? NetworkImage(contact.imageUrl!) as ImageProvider
+                        ? NetworkImage(contact.imageUrl!)
                         : null),
                     child: (contact.image == null && contact.imageUrl == null)
                         ? Text(
@@ -58,6 +58,17 @@ class ContactTile extends StatelessWidget {
                       fontSize: 17,
                       color: CupertinoColors.label,
                     ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => model.toggleFavorite(index),
+                  child: Icon(
+                    contact.isFavorite
+                        ? CupertinoIcons.star_fill
+                        : CupertinoIcons.star,
+                    color: contact.isFavorite
+                        ? CupertinoColors.systemYellow
+                        : CupertinoColors.systemGrey2,
                   ),
                 ),
               ],

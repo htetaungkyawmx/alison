@@ -38,8 +38,6 @@ class _ContactsListPageState extends State<ContactsListPage> {
           child: CustomScrollView(
             slivers: [
               CupertinoSliverNavigationBar(
-                backgroundColor: CupertinoColors.systemGroupedBackground,
-                border: null,
                 largeTitle: const Text('Contacts'),
                 trailing: CupertinoButton(
                   padding: EdgeInsets.zero,
@@ -51,10 +49,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
                       ),
                     );
                   },
-                  child: const Icon(
-                    CupertinoIcons.add,
-                    size: 26,
-                  ),
+                  child: const Icon(CupertinoIcons.add, size: 28),
                 ),
               ),
               SliverPersistentHeader(
@@ -72,20 +67,19 @@ class _ContactsListPageState extends State<ContactsListPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 10),
+                          padding:
+                          const EdgeInsets.only(left: 20, top: 10, bottom: 5),
                           child: Text(
                             key,
                             style: const TextStyle(
-                              fontSize: 15,
+                              fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: CupertinoColors.systemGrey,
                             ),
                           ),
                         ),
                         CupertinoListSection.insetGrouped(
-                          hasLeading: false,
-                          backgroundColor:
-                          CupertinoColors.systemGroupedBackground,
+                          backgroundColor: CupertinoColors.systemGroupedBackground,
                           children: contacts.map((c) {
                             final index = model.contacts.indexOf(c);
                             return ContactTile(index: index);
@@ -115,7 +109,7 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: CupertinoColors.systemGroupedBackground,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: CupertinoSearchTextField(
         placeholder: 'Search',
         onChanged: onChanged,
@@ -124,9 +118,9 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 52;
+  double get maxExtent => 56;
   @override
-  double get minExtent => 52;
+  double get minExtent => 56;
   @override
   bool shouldRebuild(covariant _SearchHeader oldDelegate) => false;
 }

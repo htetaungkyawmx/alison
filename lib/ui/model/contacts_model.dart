@@ -40,15 +40,12 @@ class ContactsModel extends Model {
       final lastName = faker.person.lastName();
       final fullName = '$firstName $lastName';
 
-      _contacts.add(
-        Contact(
-          name: fullName,
-          email: faker.internet.email(),
-          phoneNumber: faker.phoneNumber.us(),
-          // Generate unique fake avatar URL
-          imageUrl: '$avatarBase$firstName$lastName',
-        ),
-      );
+      _contacts.add(Contact(
+        name: fullName,
+        email: faker.internet.email(),
+        phoneNumber: faker.phoneNumber.us(),
+        imageUrl: '$avatarBase$firstName$lastName',
+      ));
     }
 
     _sortContacts();

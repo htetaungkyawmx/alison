@@ -1,32 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../data/contact.dart';
+import '../../data/contact.dart';
 
 class ContactDetailPage extends StatelessWidget {
   final Contact contact;
   const ContactDetailPage({super.key, required this.contact});
-
-  void _showFullImage(BuildContext context) {
-    if (contact.image == null) return;
-    showCupertinoDialog(
-      context: context,
-      builder: (_) => CupertinoPageScaffold(
-        backgroundColor: Colors.black,
-        child: GestureDetector(
-          onTap: () => Navigator.pop(context),
-          child: Center(
-            child: Hero(
-              tag: contact.name,
-              child: Image.memory(
-                contact.image!,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,24 +15,35 @@ class ContactDetailPage extends StatelessWidget {
       ),
       child: SafeArea(
         child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 20),
+          padding: const EdgeInsets.symmetric(vertical: 24),
           children: [
-            Center(
-              child: GestureDetector(
-                onTap: () => _showFullImage(context),
+            GestureDetector(
+              onTap: () {
+                if (contact.image != null || contact.imageUrl != null) {
+                  Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                      builder: (_) => FullPhotoPage(contact: contact),
+                    ),
+                  );
+                }
+              },
+              child: Center(
                 child: Hero(
                   tag: contact.name,
                   child: CircleAvatar(
-                    radius: 50,
+                    radius: 60,
                     backgroundColor: CupertinoColors.systemGrey5,
                     backgroundImage: contact.image != null
                         ? MemoryImage(contact.image!)
-                        : null,
-                    child: contact.image == null
+                        : (contact.imageUrl != null
+                        ? NetworkImage(contact.imageUrl!)
+                        : null),
+                    child: (contact.image == null && contact.imageUrl == null)
                         ? Text(
                       contact.name[0].toUpperCase(),
                       style: const TextStyle(
-                        fontSize: 36,
+                        fontSize: 42,
                         fontWeight: FontWeight.w600,
                       ),
                     )
@@ -63,19 +52,16 @@ class ContactDetailPage extends StatelessWidget {
                 ),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             Center(
               child: Text(
                 contact.name,
                 style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                    fontSize: 22, fontWeight: FontWeight.bold),
               ),
             ),
-            const SizedBox(height: 25),
+            const SizedBox(height: 30),
             CupertinoListSection.insetGrouped(
-              backgroundColor: CupertinoColors.systemBackground,
               children: [
                 CupertinoListTile(
                   leading: const Icon(CupertinoIcons.phone),
@@ -88,6 +74,28 @@ class ContactDetailPage extends StatelessWidget {
               ],
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class FullPhotoPage extends StatelessWidget {
+  final Contact contact;
+  const FullPhotoPage({super.key, required this.contact});
+
+  @override
+  Widget build(BuildContext context) {
+    return CupertinoPageScaffold(
+      backgroundColor: Colors.black,
+      child: Center(
+        child: Hero(
+          tag: contact.name,
+          child: contact.image != null
+              ? Image.memory(contact.image!)
+              : (contact.imageUrl != null
+              ? Image.network(contact.imageUrl!)
+              : Container()),
         ),
       ),
     );
