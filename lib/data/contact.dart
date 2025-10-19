@@ -6,6 +6,7 @@ class Contact {
   String phoneNumber;
   bool isFavorite;
   Uint8List? image;
+  String? imageUrl;
 
   Contact({
     required this.name,
@@ -13,5 +14,6 @@ class Contact {
     required this.phoneNumber,
     this.isFavorite = false,
     this.image,
+    this.imageUrl,
   });
 }

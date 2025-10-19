@@ -3,14 +3,11 @@ import 'package:scoped_model/scoped_model.dart';
 import '../../data/contact.dart';
 
 class ContactsModel extends Model {
-  final List<Contact> _contacts = List.generate(8, (index) {
-    final f = Faker();
-    return Contact(
-      name: '${f.person.firstName()} ${f.person.lastName()}',
-      email: f.internet.email(),
-      phoneNumber: f.phoneNumber.us(),
-    );
-  });
+  final List<Contact> _contacts = [];
+
+  ContactsModel() {
+    _generateDummyContacts();
+  }
 
   List<Contact> get contacts => _contacts;
 
@@ -32,5 +29,28 @@ class ContactsModel extends Model {
       if (!a.isFavorite && b.isFavorite) return 1;
       return a.name.compareTo(b.name);
     });
+  }
+
+  void _generateDummyContacts() {
+    final faker = Faker();
+    final avatarBase = 'https://api.dicebear.com/9.x/avataaars/png?seed=';
+
+    for (int i = 0; i < 100; i++) {
+      final firstName = faker.person.firstName();
+      final lastName = faker.person.lastName();
+      final fullName = '$firstName $lastName';
+
+      _contacts.add(
+        Contact(
+          name: fullName,
+          email: faker.internet.email(),
+          phoneNumber: faker.phoneNumber.us(),
+          // Generate unique fake avatar URL
+          imageUrl: '$avatarBase$firstName$lastName',
+        ),
+      );
+    }
+
+    _sortContacts();
   }
 }

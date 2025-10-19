@@ -33,9 +33,12 @@ class ContactTile extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 22,
                     backgroundColor: CupertinoColors.systemGrey5,
-                    backgroundImage:
-                    contact.image != null ? MemoryImage(contact.image!) : null,
-                    child: contact.image == null
+                    backgroundImage: contact.image != null
+                        ? MemoryImage(contact.image!)
+                        : (contact.imageUrl != null
+                        ? NetworkImage(contact.imageUrl!) as ImageProvider
+                        : null),
+                    child: (contact.image == null && contact.imageUrl == null)
                         ? Text(
                       contact.name[0].toUpperCase(),
                       style: const TextStyle(

@@ -20,14 +20,12 @@ class _ContactsListPageState extends State<ContactsListPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<ContactsModel>(
       builder: (context, child, model) {
-        // Filter contacts based on search query
         final filtered = model.contacts
             .where((c) =>
         c.name.toLowerCase().contains(query.toLowerCase()) ||
             c.phoneNumber.contains(query))
             .toList();
 
-        // Group contacts alphabetically
         final Map<String, List<Contact>> grouped = {};
         for (var c in filtered) {
           final key = c.name.isNotEmpty ? c.name[0].toUpperCase() : '#';
@@ -55,7 +53,7 @@ class _ContactsListPageState extends State<ContactsListPage> {
                   },
                   child: const Icon(
                     CupertinoIcons.add,
-                    size: 28,
+                    size: 26,
                   ),
                 ),
               ),
@@ -74,12 +72,11 @@ class _ContactsListPageState extends State<ContactsListPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding:
-                          const EdgeInsets.only(left: 20, top: 10, bottom: 5),
+                          padding: const EdgeInsets.only(left: 20, top: 10),
                           child: Text(
                             key,
                             style: const TextStyle(
-                              fontSize: 16,
+                              fontSize: 15,
                               fontWeight: FontWeight.w600,
                               color: CupertinoColors.systemGrey,
                             ),
@@ -118,7 +115,7 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: CupertinoColors.systemGroupedBackground,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       child: CupertinoSearchTextField(
         placeholder: 'Search',
         onChanged: onChanged,
@@ -127,9 +124,9 @@ class _SearchHeader extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => 56;
+  double get maxExtent => 52;
   @override
-  double get minExtent => 56;
+  double get minExtent => 52;
   @override
   bool shouldRebuild(covariant _SearchHeader oldDelegate) => false;
 }
