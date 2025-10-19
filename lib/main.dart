@@ -3,13 +3,10 @@ import 'package:scoped_model/scoped_model.dart';
 import 'ui/model/contacts_model.dart';
 import 'ui/contacts_list/contacts_list_page.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   final ContactsModel contactsModel = ContactsModel();
-
   MyApp({super.key});
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
 import '../../../data/contact.dart';
 
 class ContactDetailPage extends StatelessWidget {
@@ -17,20 +18,23 @@ class ContactDetailPage extends StatelessWidget {
           children: [
             const SizedBox(height: 40),
             Center(
-              child: CircleAvatar(
-                radius: 60,
-                backgroundColor: CupertinoColors.systemGrey5,
-                backgroundImage:
-                    contact.image != null ? MemoryImage(contact.image!) : null,
-                child: contact.image == null
-                    ? Text(
-                        contact.name[0],
-                        style: const TextStyle(
-                          fontSize: 42,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : null,
+              child: Hero(
+                tag: contact.name,
+                child: CircleAvatar(
+                  radius: 65,
+                  backgroundColor: CupertinoColors.systemGrey5,
+                  backgroundImage:
+                  contact.image != null ? MemoryImage(contact.image!) : null,
+                  child: contact.image == null
+                      ? Text(
+                    contact.name[0],
+                    style: const TextStyle(
+                      fontSize: 44,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  )
+                      : null,
+                ),
               ),
             ),
             const SizedBox(height: 20),

@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../model/contacts_model.dart';
-import '../contacts_list/contact_tile.dart';
 import '../contact/contact_create_page.dart';
+import 'contact_tile.dart';
 
 class ContactsListPage extends StatefulWidget {
   const ContactsListPage({super.key});
@@ -20,8 +20,8 @@ class _ContactsListPageState extends State<ContactsListPage> {
       builder: (context, child, model) {
         final filtered = model.contacts
             .where((c) =>
-                c.name.toLowerCase().contains(query.toLowerCase()) ||
-                c.phoneNumber.contains(query))
+        c.name.toLowerCase().contains(query.toLowerCase()) ||
+            c.phoneNumber.contains(query))
             .toList();
 
         final favorites = filtered.where((c) => c.isFavorite).toList();
@@ -40,31 +40,35 @@ class _ContactsListPageState extends State<ContactsListPage> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 8),
                       child: CupertinoSearchTextField(
-                        placeholder: 'Search',
+                        placeholder: 'Search Contacts',
                         onChanged: (val) => setState(() => query = val),
                       ),
                     ),
                     Expanded(
-                      child: ListView(
-                        children: [
-                          if (favorites.isNotEmpty)
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 400),
+                        child: ListView(
+                          key: ValueKey(query),
+                          children: [
+                            if (favorites.isNotEmpty)
+                              CupertinoListSection.insetGrouped(
+                                header: const Text('Favorites'),
+                                children: favorites.map((contact) {
+                                  final index =
+                                  model.contacts.indexOf(contact);
+                                  return ContactTile(index: index);
+                                }).toList(),
+                              ),
                             CupertinoListSection.insetGrouped(
-                              header: const Text('Favorites'),
-                              children: favorites.map((contact) {
+                              header: const Text('All Contacts'),
+                              children: others.map((contact) {
                                 final index =
-                                    model.contacts.indexOf(contact);
+                                model.contacts.indexOf(contact);
                                 return ContactTile(index: index);
                               }).toList(),
                             ),
-                          CupertinoListSection.insetGrouped(
-                            header: const Text('Contacts'),
-                            children: others.map((contact) {
-                              final index =
-                                  model.contacts.indexOf(contact);
-                              return ContactTile(index: index);
-                            }).toList(),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -72,19 +76,23 @@ class _ContactsListPageState extends State<ContactsListPage> {
                 Positioned(
                   bottom: 25,
                   right: 25,
-                  child: CupertinoButton(
-                    color: CupertinoColors.activeBlue,
-                    borderRadius: BorderRadius.circular(30),
-                    padding: const EdgeInsets.all(14),
-                    child: const Icon(CupertinoIcons.add),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        CupertinoPageRoute(
-                          builder: (_) => const ContactCreatePage(),
-                        ),
-                      );
-                    },
+                  child: AnimatedScale(
+                    scale: 1,
+                    duration: const Duration(milliseconds: 250),
+                    child: CupertinoButton(
+                      color: CupertinoColors.activeBlue,
+                      borderRadius: BorderRadius.circular(30),
+                      padding: const EdgeInsets.all(14),
+                      child: const Icon(CupertinoIcons.add),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (_) => const ContactCreatePage(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

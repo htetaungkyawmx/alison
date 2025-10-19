@@ -1,8 +1,10 @@
 import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
+
 import '../../data/contact.dart';
 import '../model/contacts_model.dart';
 
@@ -23,9 +25,8 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
     final picker = ImagePicker();
     final image = await picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      setState(() async {
-        _imageBytes = await image.readAsBytes();
-      });
+      final bytes = await image.readAsBytes();
+      setState(() => _imageBytes = bytes);
     }
   }
 
@@ -62,15 +63,19 @@ class _ContactCreatePageState extends State<ContactCreatePage> {
                 Center(
                   child: GestureDetector(
                     onTap: _pickImage,
-                    child: CircleAvatar(
-                      radius: 55,
-                      backgroundColor: CupertinoColors.systemGrey5,
-                      backgroundImage:
-                          _imageBytes != null ? MemoryImage(_imageBytes!) : null,
-                      child: _imageBytes == null
-                          ? const Icon(CupertinoIcons.person_add,
-                              size: 35, color: CupertinoColors.systemGrey)
-                          : null,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      child: CircleAvatar(
+                        radius: 55,
+                        backgroundColor: CupertinoColors.systemGrey5,
+                        backgroundImage:
+                        _imageBytes != null ? MemoryImage(_imageBytes!) : null,
+                        child: _imageBytes == null
+                            ? const Icon(CupertinoIcons.person_add,
+                            size: 35, color: CupertinoColors.systemGrey)
+                            : null,
+                      ),
                     ),
                   ),
                 ),

@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 import 'package:faker/faker.dart';
 import 'package:scoped_model/scoped_model.dart';
 import '../../data/contact.dart';
@@ -6,10 +5,8 @@ import '../../data/contact.dart';
 class ContactsModel extends Model {
   final List<Contact> _contacts = List.generate(8, (index) {
     final f = Faker();
-    final first = f.person.firstName();
-    final last = f.person.lastName();
     return Contact(
-      name: '$first $last',
+      name: '${f.person.firstName()} ${f.person.lastName()}',
       email: f.internet.email(),
       phoneNumber: f.phoneNumber.us(),
     );
